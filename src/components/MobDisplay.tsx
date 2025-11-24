@@ -55,7 +55,7 @@ export default function MobDisplay({
                 {/* Red damage overlay */}
                 {isDamaged && (
                     <div
-                        className="image-pixalated pointer-events-none absolute"
+                        className="image-pixelated pointer-events-none absolute"
                         style={{
                             backgroundColor: "rgba(249, 45, 45, 0.6)",
                             transform: `scale(${size})`,
