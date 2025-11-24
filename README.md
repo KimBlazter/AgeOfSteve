@@ -4,8 +4,8 @@
 
 With HTTP
 ```bash
-git clone https://github.com/KimBlazter/PokeIncremental.git
-cd PokeIncremental
+git clone https://github.com/KimBlazter/AgeOfSteve.git
+cd AgeOfSteve
 ```
 
 ## Start the game
