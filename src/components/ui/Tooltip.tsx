@@ -8,7 +8,7 @@ import {
     offset,
     Placement,
     autoUpdate,
-} from "@floating-ui/react";
+} from "@floating-ui/react-dom";
 
 type TooltipProps = {
     children: ReactNode;
