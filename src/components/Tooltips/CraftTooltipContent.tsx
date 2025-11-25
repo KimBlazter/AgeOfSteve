@@ -10,7 +10,6 @@ import WeaponDescription from "./item/WeaponDescription";
 import ConsumableDescription from "./item/ConsumableDescription";
 
 export default function CraftTooltipContent({ craft }: { craft: Craft }) {
-    const resources = useGameStore((state) => state.resources);
     const hasItem = useGameStore((state) => state.hasItem);
 
     return (
@@ -55,47 +54,13 @@ export default function CraftTooltipContent({ craft }: { craft: Craft }) {
                     <span className="-mb-1 flex flex-row items-center">
                         cost:{" "}
                         <div className="ml-1 flex flex-row items-center gap-1">
-                            {/* Resources */}
-                            {craft.cost.resources?.map(
-                                ({ material, amount }) => (
-                                    <span
-                                        key={`${amount}${material}`}
-                                        className={clsx(
-                                            "flex flex-row items-center",
-                                            (
-                                                resources[material].amount >=
-                                                    amount
-                                            ) ?
-                                                "text-green-400"
-                                            :   "text-red-400"
-                                        )}
-                                    >
-                                        {amount}
-                                        {/* Texture icon */}
-                                        <ItemIcon
-                                            className="[&_img]:image-auto! ml-0.5 size-7"
-                                            texture={
-                                                resources[material].texture ??
-                                                "barrier"
-                                            }
-                                        />
-                                    </span>
-                                )
-                            )}
                             {/* Item */}
                             {craft.cost.items?.map((item) => (
                                 <span
                                     key={item.key}
                                     className={clsx(
                                         "flex flex-row items-center",
-                                        (
-                                            hasItem(
-                                                GAME_ITEMS[
-                                                    item.key as GameItemKey
-                                                ].id,
-                                                item.amount
-                                            )
-                                        ) ?
+                                        hasItem(item.key, item.amount) ?
                                             "text-green-400"
                                         :   "text-red-400"
                                     )}
@@ -111,10 +76,9 @@ export default function CraftTooltipContent({ craft }: { craft: Craft }) {
                                 </span>
                             ))}
                         </div>
-                        {craft.cost.items?.length === 0 &&
-                            craft.cost.resources?.length === 0 && (
-                                <span className="text-green-400">Free</span>
-                            )}
+                        {craft.cost.items?.length === 0 && (
+                            <span className="text-green-400">Free</span>
+                        )}
                     </span>
 
                     {/* Result */}
