@@ -73,7 +73,7 @@ export default function CraftTooltipContent({ craft }: { craft: Craft }) {
                                         {amount}
                                         {/* Texture icon */}
                                         <ItemIcon
-                                            className="[&_img]:!image-auto ml-0.5 size-7"
+                                            className="[&_img]:image-auto! ml-0.5 size-7"
                                             texture={
                                                 resources[material].texture ??
                                                 "barrier"
@@ -102,7 +102,7 @@ export default function CraftTooltipContent({ craft }: { craft: Craft }) {
                                 >
                                     {item.amount ?? 1}
                                     <ItemIcon
-                                        className="[&_img]:!image-auto ml-0.5 size-7"
+                                        className="[&_img]:image-auto! ml-0.5 size-7"
                                         texture={
                                             GAME_ITEMS[item.key as GameItemKey]
                                                 .texture
@@ -122,7 +122,7 @@ export default function CraftTooltipContent({ craft }: { craft: Craft }) {
                         result: {craft.result.qty}
                         <ItemIcon
                             texture={craft.result.item.texture}
-                            className="[&_img]:!image-auto size-7"
+                            className="[&_img]:image-auto! size-7"
                         />
                     </span>
                 </div>
