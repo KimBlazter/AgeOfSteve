@@ -7,7 +7,7 @@ export const upgrades = {
     "upgrade.wood.big_biceps": {
         name: "Big Biceps",
         description: "wood +1",
-        cost: { resource: "wood", amount: 10 },
+        cost: { item: "oak_log", amount: 10 },
         effect: (gameStore) =>
             gameStore.updateMultiplier("wood", (prev) => prev + 1),
         unlocked: false,
@@ -15,7 +15,7 @@ export const upgrades = {
     "unlock.stone": {
         name: "Ready to get high",
         description: "Unlock the Stone Age",
-        cost: { resource: "wood", amount: 10 },
+        cost: { item: "oak_log", amount: 10 },
         effect: (gameStore) => gameStore.unlockAge("stone"),
         unlocked: false,
     },
@@ -26,7 +26,7 @@ export const upgrades = {
     "unlock.iron": {
         name: "Harder than ever",
         description: "Unlock the Iron Age",
-        cost: { resource: "cobblestone", amount: 20 },
+        cost: { item: "cobblestone", amount: 20 },
         effect: (gameStore) => gameStore.unlockAge("iron"),
         unlocked: false,
         ageRequirement: "stone",
