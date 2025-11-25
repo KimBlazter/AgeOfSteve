@@ -7,9 +7,7 @@ export const achievements = {
         texture: "item:wooden_axe",
         hint: "Craft way to much items",
         description: "Have 4 Wooden Axe in your inventory",
-        condition: (gamestore) =>
-            gamestore.items.filter((item) => item.id === "wooden_axe").length >=
-            4,
+        condition: (gamestore) => gamestore.getItemCount("wooden_axe") >= 4,
         unlocked: false,
     },
     "wood.wooden_pickaxe": {
@@ -18,9 +16,7 @@ export const achievements = {
         texture: "item:wooden_pickaxe",
         hint: "We need stone for the furnace",
         description: "Have 1 Wooden Pickaxe in your inventory",
-        condition: (gamestore) =>
-            gamestore.items.filter((item) => item.id === "wooden_pickaxe")
-                .length >= 1,
+        condition: (gamestore) => gamestore.getItemCount("wooden_pickaxe") >= 1,
         unlocked: false,
     },
     "wood.second_wooden_pickaxe": {
@@ -29,9 +25,7 @@ export const achievements = {
         texture: "item:wooden_pickaxe",
         hint: "We need stone for the furnace",
         description: "Have 2 Wooden Pickaxe in your inventory",
-        condition: (gamestore) =>
-            gamestore.items.filter((item) => item.id === "wooden_pickaxe")
-                .length >= 2,
+        condition: (gamestore) => gamestore.getItemCount("wooden_pickaxe") >= 2,
         unlocked: false,
     },
     "wood.first_sword": {
@@ -40,9 +34,7 @@ export const achievements = {
         texture: "item:wooden_sword",
         hint: "We need a sword to fight",
         description: "Have 1 Wooden Sword in your inventory",
-        condition: (gamestore) =>
-            gamestore.items.filter((item) => item.id === "wooden_sword")
-                .length >= 1,
+        condition: (gamestore) => gamestore.getItemCount("wooden_sword") >= 1,
         unlocked: false,
     },
     "wood.second_sword": {
@@ -51,9 +43,7 @@ export const achievements = {
         texture: "item:wooden_sword",
         hint: "We need a sword to fight",
         description: "Have 2 Wooden Sword in your inventory",
-        condition: (gamestore) =>
-            gamestore.items.filter((item) => item.id === "wooden_sword")
-                .length >= 2,
+        condition: (gamestore) => gamestore.getItemCount("wooden_sword") >= 2,
         unlocked: false,
     },
     "wood.third_sword": {
@@ -62,9 +52,7 @@ export const achievements = {
         texture: "item:wooden_sword",
         hint: "We need a sword to fight",
         description: "Have 3 Wooden Sword in your inventory",
-        condition: (gamestore) =>
-            gamestore.items.filter((item) => item.id === "wooden_sword")
-                .length >= 3,
+        condition: (gamestore) => gamestore.getItemCount("wooden_sword") >= 3,
         unlocked: false,
     },
     "stone.stoner": {
@@ -72,34 +60,34 @@ export const achievements = {
         texture: "block:stone",
         hint: "Keep mining...",
         description: "Have 42 cobblestone or more",
-        condition: (gamestore) => gamestore.resources.cobblestone.amount >= 42,
+        condition: (gamestore) => gamestore.getItemCount("cobblestone") >= 42,
         unlocked: false,
     },
     "iron.man_of_steel": {
         name: "Man of Steel",
         parentId: "stone.stoner",
         hint: "We need iron for the golem",
-        description: "Have 100 iron or more",
+        description: "Have 100 raw iron or more",
         texture: "item:iron_nugget",
-        condition: (gamestore) => gamestore.resources.iron.amount >= 100,
+        condition: (gamestore) => gamestore.getItemCount("raw_iron") >= 100,
         unlocked: false,
     },
     "iron.iron_golem": {
         name: "Iron Golem",
         parentId: "iron.man_of_steel",
         hint: "We need a pumpkin for the golem",
-        description: "Have 1 iron golem in your world",
+        description: "Have 10000 raw iron in your world",
         texture: "block:iron_block",
-        condition: (gamestore) => gamestore.resources.iron.amount >= 10000,
+        condition: (gamestore) => gamestore.getItemCount("raw_iron") >= 10000,
         unlocked: false,
     },
     "iron.iron_pickaxe": {
         name: "Iron Pickaxe",
         parentId: "iron.man_of_steel",
         hint: "We need iron for the pickaxe",
-        description: "Have 1 iron pickaxe in your world",
+        description: "Have 500 raw iron in your world",
         texture: "item:iron_pickaxe",
-        condition: (gamestore) => gamestore.resources.iron.amount >= 500,
+        condition: (gamestore) => gamestore.getItemCount("raw_iron") >= 500,
         unlocked: false,
     },
 } satisfies Record<AchievementKeyType, Achievement>;
