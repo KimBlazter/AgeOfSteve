@@ -44,13 +44,11 @@ export const createBonusSlice: StateCreator<GameStore, [], [], BonusSlice> = (
         wood: { baseGain: 1, multiplier: 1 },
         cobblestone: { baseGain: 1, multiplier: 1 },
         iron: { baseGain: 1, multiplier: 1 },
-        gold: { baseGain: 1, multiplier: 1 },
     },
     timedBonuses: {
         wood: [],
         cobblestone: [],
         iron: [],
-        gold: [],
     },
     updateBaseGain: (resource, value) =>
         set(
