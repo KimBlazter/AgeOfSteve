@@ -9,8 +9,31 @@ export const hotkeys = {
         action: () => {
             const gameStore = useGameStore.getState();
             const resource = gameStore.ages[gameStore.currentAge].collectible;
-            const multiplier = gameStore.computeResourcesYield(resource);
-            gameStore.updateResource(resource, multiplier);
+            const lootTable = gameStore.resources[resource].lootTable;
+
+            // Process each drop in the loot table
+            lootTable.forEach((drop) => {
+                if (Math.random() <= drop.chance) {
+                    const quantity = Math.floor(
+                        Math.random() *
+                            (drop.maxQuantity - drop.minQuantity + 1) +
+                            drop.minQuantity
+                    );
+
+                    // Apply resource multiplier only if this drop has a matching resourceType
+                    let finalQuantity = quantity;
+                    if ("resourceType" in drop && drop.resourceType) {
+                        const multiplier = gameStore.computeResourcesYield(
+                            drop.resourceType
+                        );
+                        finalQuantity = Math.floor(quantity * multiplier);
+                    }
+
+                    if (finalQuantity > 0) {
+                        gameStore.addItem(drop.item, finalQuantity);
+                    }
+                }
+            });
         },
     },
     openAchievements: {
