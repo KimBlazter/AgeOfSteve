@@ -80,8 +80,20 @@ export type Item =
 // Type for items that are in the inventory (always have instanceId)
 export type ItemWithInstance = Item & { instanceId: string };
 
+export interface InventoryFilters {
+    search?: string;
+    type?: Item["type"] | "all";
+    equipmentSlot?: SlotType | "all";
+    stackable?: boolean | "all";
+}
+
 export interface ItemSlice {
     items: ItemWithInstance[];
+    getItems: () => ItemWithInstance[];
+    filters: InventoryFilters;
+    setFilters: (patch: Partial<InventoryFilters>) => void;
+    resetFilters: () => void;
+    getFilteredItems: () => ItemWithInstance[];
     addItem: (item: Item, quantity?: number) => void;
     removeItem: (item: Item, quantity?: number) => void;
     useItem: (item: Item) => void;
@@ -94,6 +106,45 @@ export const createItemSlice: StateCreator<GameStore, [], [], ItemSlice> = (
     get
 ) => ({
     items: [],
+    getItems: () => {
+        return get().items;
+    },
+    filters: {
+        search: "all",
+        type: "all",
+        equipmentSlot: "all",
+        stackable: "all",
+    },
+    setFilters: (patch) =>
+    set((state) => ({
+        filters: {
+            ...state.filters,
+            ...patch,
+        },
+    })),
+    resetFilters: () =>
+    set({
+        filters: {
+            search: "",
+            type: "all",
+            equipmentSlot: "all",
+            stackable: "all",
+        },
+    }),
+    getFilteredItems: () => {
+        const {items, filters} = get();
+        return items.filter((item) => {
+            // Filter by search term
+            if (filters.search && !item.name.toLowerCase().includes(filters.search.toLowerCase())) {
+                return false;
+            }
+
+            // Item type
+            if (filters.type && filters.type !== "all" && item.type !== filters.type) {
+                return false;
+            }
+        })
+    },
     addItem: (item, qty = 1) => {
         set(
             produce((state: ItemSlice) => {
