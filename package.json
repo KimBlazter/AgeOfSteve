@@ -11,6 +11,7 @@
         "play": "npm run build && npm run preview"
     },
     "dependencies": {
+        "@floating-ui/react": "^0.27.16",
         "@tailwindcss/vite": "^4.1.17",
         "@tanstack/react-router": "^1.139.3",
         "@tanstack/react-router-devtools": "^1.139.3",
