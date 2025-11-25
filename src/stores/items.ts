@@ -4,6 +4,7 @@ import { GameStore } from "./game";
 import { SlotType } from "./equipments";
 import { type EffectKey, EFFECTS } from "@/data/effects";
 import { Texture } from "@/utils/spriteLoader";
+import { GameItemKey } from "@/data/items";
 
 export type ToolType = "axe" | "pickaxe" | "shovel" | "hoe";
 
@@ -74,7 +75,8 @@ export interface ItemSlice {
     addItem: (item: Item, quantity?: number) => void;
     removeItem: (item: Item, quantity?: number) => void;
     useItem: (item: Item) => void;
-    hasItem: (id: string, amount?: number) => boolean;
+    hasItem: (id: GameItemKey, amount?: number) => boolean;
+    getItemCount: (id: GameItemKey) => number;
 }
 
 export const createItemSlice: StateCreator<GameStore, [], [], ItemSlice> = (
@@ -168,5 +170,12 @@ export const createItemSlice: StateCreator<GameStore, [], [], ItemSlice> = (
                 return acc + (item.quantity || 1); // Use quantity if available, otherwise count as 1
             }, 0);
         return count >= (amount ?? 1);
+    },
+    getItemCount: (id) => {
+        return get()
+            .items.filter((item: Item) => item.id === id)
+            .reduce((acc, item) => {
+                return acc + (item.quantity || 1); // Use quantity if available, otherwise count as 1
+            }, 0);
     },
 });
