@@ -3,7 +3,7 @@ import { Item } from "@/stores/items";
 export const GAME_ITEMS = {
     // WOOD AGE
     oak_log: {
-        type: "generic",
+        type: "resource",
         id: "oak_log",
         name: "Oak Log",
         description: "A log from an oak tree.",
@@ -63,7 +63,7 @@ export const GAME_ITEMS = {
         defense: 4,
     },
     log_pile: {
-        type: "generic",
+        type: "resource",
         id: "log_pile",
         name: "Log Pile",
         description: "A pile of logs, used for crafting.",
@@ -90,7 +90,7 @@ export const GAME_ITEMS = {
 
     // STONE AGE
     cobblestone: {
-        type: "generic",
+        type: "resource",
         id: "cobblestone",
         name: "Cobblestone",
         description: "A rough piece of cobblestone.",
@@ -146,7 +146,7 @@ export const GAME_ITEMS = {
         defense: 1,
     },
     raw_iron: {
-        type: "generic",
+        type: "resource",
         id: "raw_iron",
         name: "Raw Iron",
         description: "A shiny piece of raw iron.",
