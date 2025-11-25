@@ -1,6 +1,7 @@
 import ItemComponent from "./ItemComponent";
 import { useGameStore } from "@/stores/game";
 import { useRef, useState, useEffect } from "react";
+import ItemFilterComponent from "./ItemFilterComponent";
 
 export default function ItemsComponent() {
     const items = useGameStore((state) => state.items);
@@ -39,9 +40,13 @@ export default function ItemsComponent() {
 
     return (
         <div className="flex h-full flex-col">
-            <h2 className="text-mcInventoryText text-lg font-bold">
-                Inventory
-            </h2>
+            <div className="flex flex-row justify-between">
+                <h2 className="text-mcInventoryText text-lg font-bold">
+                    Inventory
+                </h2>
+                <ItemFilterComponent />
+            </div>
+
             <div
                 ref={containerRef}
                 className="grid auto-rows-[48px] grid-cols-[repeat(auto-fill,48px)] gap-0 overflow-y-auto pt-1"
