@@ -11,7 +11,13 @@ export default function UpgradeComponent({
     upgrade: Upgrade;
 }) {
     const unlockUpgrade = useGameStore((state) => state.unlockUpgrade);
-    const resources = useGameStore((state) => state.resources);
+    const hasItem = useGameStore((state) => state.hasItem);
+    const itemCount = useGameStore((state) =>
+        state.getItemCount(upgrade.cost.item)
+    );
+
+    const hasEnough = hasItem(upgrade.cost.item, upgrade.cost.amount);
+
     return (
         <Tooltip
             content={<div>{upgrade.description}</div>}
@@ -20,7 +26,7 @@ export default function UpgradeComponent({
         >
             <button
                 disabled={upgrade.unlocked}
-                className="flex w-full flex-col !bg-gray-600"
+                className="flex w-full flex-col bg-gray-600!"
                 onClick={() => {
                     unlockUpgrade(upgradeKey);
                 }}
@@ -28,19 +34,14 @@ export default function UpgradeComponent({
                 {upgrade.name}
                 {!upgrade.unlocked && (
                     <span className="text-sm text-gray-300 text-shadow-none">
-                        {upgrade.cost.resource}: {upgrade.cost.amount}{" "}
+                        {upgrade.cost.item}: {upgrade.cost.amount}{" "}
                         <span
                             className={clsx(
                                 "mc-text-shadow",
-                                (
-                                    resources[upgrade.cost.resource].amount <
-                                        upgrade.cost.amount
-                                ) ?
-                                    "text-red-400"
-                                :   "text-green-400"
+                                hasEnough ? "text-green-400" : "text-red-400"
                             )}
                         >
-                            ({resources[upgrade.cost.resource].amount})
+                            ({itemCount})
                         </span>
                     </span>
                 )}
