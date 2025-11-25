@@ -1,6 +1,5 @@
 import ItemComponent from "./ItemComponent";
 import { useGameStore } from "@/stores/game";
-import { nanoid } from "nanoid";
 import { useRef, useState, useEffect } from "react";
 
 export default function ItemsComponent() {
@@ -48,7 +47,7 @@ export default function ItemsComponent() {
                 className="grid auto-rows-[48px] grid-cols-[repeat(auto-fill,48px)] gap-0 overflow-y-auto pt-1"
             >
                 {items.map((item) => (
-                    <ItemComponent key={nanoid()} item={item} />
+                    <ItemComponent key={item.instanceId} item={item} />
                 ))}
                 {/* Empty slots */}
                 {Array.from({ length: emptySlotsCount }).map((_, idx) => (
