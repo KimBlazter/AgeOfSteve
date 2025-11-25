@@ -22,7 +22,7 @@ export type ItemEffect = {
 // This interface defines the common properties for all items in the game.
 export interface BaseItem {
     id: string;
-    instanceId: string; // Unique identifier for this specific item instance
+    instanceId?: string; // Unique identifier for this specific item instance (added when item is added to inventory)
     name: string;
     description?: string;
     texture: Texture;
@@ -77,8 +77,11 @@ export type Item =
     | GenericItem
     | ResourceItem;
 
+// Type for items that are in the inventory (always have instanceId)
+export type ItemWithInstance = Item & { instanceId: string };
+
 export interface ItemSlice {
-    items: Item[];
+    items: ItemWithInstance[];
     addItem: (item: Item, quantity?: number) => void;
     removeItem: (item: Item, quantity?: number) => void;
     useItem: (item: Item) => void;
@@ -96,17 +99,25 @@ export const createItemSlice: StateCreator<GameStore, [], [], ItemSlice> = (
             produce((state: ItemSlice) => {
                 // Check if the item is stackable
                 if (!item.stackable) {
-                    state.items.push({ ...item, instanceId: nanoid() });
+                    // For non-stackable items, add new instance
+                    state.items.push({
+                        ...item,
+                        instanceId: item.instanceId || nanoid(),
+                    });
                 } else {
-                    // If not stackable, add a new item instance
+                    // If not stackable, check if item already exists in inventory
                     const existing = state.items.find((i) => i.id === item.id);
                     if (existing) {
                         existing.quantity = (existing.quantity || 0) + qty;
                         return; // Exit early if item already exists
                     }
                     // Otherwise, add a new item instance
-                    item = { ...item, quantity: qty, instanceId: nanoid() }; // Ensure quantity is set
-                    state.items.push(item);
+                    const newItem: ItemWithInstance = {
+                        ...item,
+                        quantity: qty,
+                        instanceId: item.instanceId || nanoid(),
+                    }; // Ensure quantity and instanceId are set
+                    state.items.push(newItem);
                 }
             })
         );
@@ -172,7 +183,7 @@ export const createItemSlice: StateCreator<GameStore, [], [], ItemSlice> = (
     },
     hasItem: (id, amount?) => {
         const count = get()
-            .items.filter((item: Item) => item.id === id)
+            .items.filter((item) => item.id === id)
             .reduce((acc, item) => {
                 return acc + (item.quantity || 1); // Use quantity if available, otherwise count as 1
             }, 0);
@@ -180,7 +191,7 @@ export const createItemSlice: StateCreator<GameStore, [], [], ItemSlice> = (
     },
     getItemCount: (id) => {
         return get()
-            .items.filter((item: Item) => item.id === id)
+            .items.filter((item) => item.id === id)
             .reduce((acc, item) => {
                 return acc + (item.quantity || 1); // Use quantity if available, otherwise count as 1
             }, 0);
