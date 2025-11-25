@@ -9,12 +9,12 @@ export default function CraftComponent({ craftId }: { craftId: CraftKey }) {
     const craftAction = useGameStore((state) => state.craft);
     return (
         <Tooltip
-            className="aspect-square h-12 w-12"
             content={<CraftTooltipContent craft={craft} />}
             align="end"
+            position="top"
         >
             <div
-                className="item-slot relative flex items-center justify-center bg-none text-xs"
+                className="item-slot relative flex items-center justify-center text-xs"
                 onClick={() => craftAction(craftId)}
             >
                 <ItemIcon texture={craft.result.item.texture} />
