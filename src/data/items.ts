@@ -89,12 +89,12 @@ export const GAME_ITEMS = {
     },
 
     // STONE AGE
-    stone: {
+    cobblestone: {
         type: "generic",
-        id: "stone",
-        name: "Stone",
-        description: "A basic stone resource.",
-        texture: "block:stone",
+        id: "cobblestone",
+        name: "Cobblestone",
+        description: "A rough piece of cobblestone.",
+        texture: "block:cobblestone",
         stackable: true,
     },
     stone_axe: {
@@ -145,12 +145,12 @@ export const GAME_ITEMS = {
         equipmentSlot: "boots",
         defense: 1,
     },
-    iron_ore: {
+    raw_iron: {
         type: "generic",
-        id: "iron_ore",
-        name: "Iron Ore",
-        description: "A shiny piece of iron ore.",
-        texture: "block:iron_ore",
+        id: "raw_iron",
+        name: "Raw Iron",
+        description: "A shiny piece of raw iron.",
+        texture: "item:raw_iron",
         stackable: true,
     },
     // Consumables
