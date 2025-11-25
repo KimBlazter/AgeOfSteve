@@ -12,14 +12,14 @@ export default function MineResourceContent({
     const resource = useGameStore(
         (state) => state.ages[state.currentAge].collectible
     );
-    const perBreak = useGameStore((state) =>
-        state.computeResourcesYield(resource)
-    );
     const currentHp = useGameStore(
         (state) => state.miningResources[resource].current_hp
     );
     const equippedTool = useGameStore(
         (state) => state.equipments[resourceData.effective_tool]
+    );
+    const computeResourcesYield = useGameStore(
+        (state) => state.computeResourcesYield
     );
 
     // Mining damage logic mirrors stores/mining.ts
@@ -32,12 +32,9 @@ export default function MineResourceContent({
 
     return (
         <div className="mc-text-shadow letter-sp flex min-w-56 flex-col gap-1 text-base tracking-normal">
-            {/* Title + owned */}
+            {/* Title */}
             <div className="flex items-center justify-between gap-4">
                 <span className="text-amber-400">{resourceData.name}</span>
-                <span className="text-xs text-blue-300/80">
-                    x{formatNumber(resourceData.amount, 3, 6)}
-                </span>
             </div>
 
             {/* Health and hits to break */}
@@ -54,18 +51,59 @@ export default function MineResourceContent({
                 </span>
             </div>
 
-            <div className="flex flex-row justify-between">
-                {/* Reward per break */}
-                <div className="flex items-center gap-1 text-xs text-white/80">
-                    <span className="text-white/70">Reward:</span>
-                    <span className="font-semibold text-green-400">
-                        +{formatNumber(perBreak)}
-                    </span>
-                    <span className="text-white/40">/break</span>
-                </div>
+            {/* Loot Table */}
+            <div className="mt-0.5 flex w-2/3 flex-col">
+                <span className="text-[11px] text-white/60">
+                    Drops per break:
+                </span>
+                <div className="rounded-md bg-gray-600/80 p-1">
+                    {resourceData.lootTable.map((drop, index) => {
+                        const hasResourceType =
+                            "resourceType" in drop && drop.resourceType;
+                        const multiplier =
+                            hasResourceType && drop.resourceType ?
+                                computeResourcesYield(drop.resourceType)
+                            :   1;
+                        const minQty = Math.floor(
+                            drop.minQuantity * multiplier
+                        );
+                        const maxQty = Math.floor(
+                            drop.maxQuantity * multiplier
+                        );
 
-                {/* Tool effectiveness */}
-                <div className="mt-0.5 flex items-center gap-1 text-xs text-white/80">
+                        return (
+                            <div
+                                key={index}
+                                className="flex items-center justify-between text-[11px]"
+                            >
+                                <div className="flex items-center gap-1">
+                                    <ItemIcon
+                                        texture={drop.item.texture}
+                                        className="size-6"
+                                    />
+                                    <span className="text-white/80">
+                                        {drop.item.name}
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-green-400">
+                                        {minQty === maxQty ?
+                                            `${minQty}`
+                                        :   `${minQty}-${maxQty}`}
+                                    </span>
+                                    <span className="text-white/40">
+                                        ({Math.round(drop.chance * 100)}%)
+                                    </span>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* Tool effectiveness */}
+            <div className="mt-1 flex items-center justify-between text-xs text-white/70">
+                <div className="flex items-center gap-1">
                     <span className="text-white/70">Best tool:</span>
                     <ItemIcon
                         className="-m-2 size-6 text-white opacity-30 brightness-0 invert-100"
