@@ -9,7 +9,7 @@ export const crafts = {
             item: { ...GAME_ITEMS.wooden_axe },
         },
         cost: {
-            resources: [{ material: "wood", amount: 10 }],
+            items: [{ key: "oak_log", amount: 10 }],
         },
     },
     wooden_pickaxe: {
@@ -18,7 +18,7 @@ export const crafts = {
             item: { ...GAME_ITEMS.wooden_pickaxe },
         },
         cost: {
-            resources: [{ material: "wood", amount: 10 }],
+            items: [{ key: "oak_log", amount: 10 }],
         },
     },
     wooden_sword: {
@@ -27,7 +27,7 @@ export const crafts = {
             item: { ...GAME_ITEMS.wooden_sword },
         },
         cost: {
-            resources: [{ material: "wood", amount: 12 }],
+            items: [{ key: "oak_log", amount: 12 }],
         },
     },
     campfire: {
@@ -36,7 +36,7 @@ export const crafts = {
             item: { ...GAME_ITEMS.campfire },
         },
         cost: {
-            resources: [{ material: "wood", amount: 20 }],
+            items: [{ key: "oak_log", amount: 20 }],
         },
     },
     shield: {
@@ -45,8 +45,7 @@ export const crafts = {
             item: { ...GAME_ITEMS.shield },
         },
         cost: {
-            resources: [{ material: "wood", amount: 15 }],
-            items: [],
+            items: [{ key: "oak_log", amount: 15 }],
         },
     },
     log_pile: {
@@ -55,7 +54,7 @@ export const crafts = {
             item: { ...GAME_ITEMS.log_pile },
         },
         cost: {
-            resources: [{ material: "wood", amount: 30 }],
+            items: [{ key: "oak_log", amount: 30 }],
         },
     },
 
@@ -66,11 +65,11 @@ export const crafts = {
             item: { ...GAME_ITEMS.stone_axe },
         },
         cost: {
-            resources: [
-                { material: "cobblestone", amount: 15 },
-                { material: "wood", amount: 5 },
+            items: [
+                { key: "cobblestone", amount: 15 },
+                { key: "oak_log", amount: 5 },
+                { key: "wooden_axe" },
             ],
-            items: [{ key: "wooden_axe" }],
         },
     },
     stone_pickaxe: {
@@ -79,8 +78,10 @@ export const crafts = {
             item: { ...GAME_ITEMS.stone_pickaxe },
         },
         cost: {
-            resources: [{ material: "cobblestone", amount: 15 }],
-            items: [{ key: "wooden_pickaxe" }],
+            items: [
+                { key: "cobblestone", amount: 15 },
+                { key: "wooden_pickaxe" },
+            ],
         },
     },
     stone_sword: {
@@ -89,8 +90,10 @@ export const crafts = {
             item: { ...GAME_ITEMS.stone_sword },
         },
         cost: {
-            resources: [{ material: "cobblestone", amount: 20 }],
-            items: [{ key: "wooden_sword" }],
+            items: [
+                { key: "cobblestone", amount: 20 },
+                { key: "wooden_sword" },
+            ],
         },
     },
     leather_boots: {
@@ -99,8 +102,7 @@ export const crafts = {
             item: { ...GAME_ITEMS.leather_boots },
         },
         cost: {
-            resources: [{ material: "cobblestone", amount: 10 }],
-            items: [],
+            items: [{ key: "cobblestone", amount: 10 }],
         },
     },
 
@@ -111,7 +113,6 @@ export const crafts = {
             qty: 2,
         },
         cost: {
-            resources: [],
             items: [],
         },
     },
