@@ -53,7 +53,7 @@ export default function ItemTooltipContent({
                     item.type === "armor") && (
                     <span className="mt-4 text-xs tracking-tighter text-white/60">
                         Left click to{" "}
-                        <span className="text-gray-300/100">
+                        <span className="text-gray-300">
                             {equiped ? "unequip" : "equip"}
                         </span>{" "}
                         {item.type}
@@ -64,7 +64,7 @@ export default function ItemTooltipContent({
                 {item.type === "consumable" && (
                     <span className="mt-4 text-xs tracking-tighter text-white/60">
                         Left click to{" "}
-                        <span className="text-gray-300/100">consume</span> item
+                        <span className="text-gray-300">consume</span> item
                     </span>
                 )}
             </div>
