@@ -1,5 +1,4 @@
 import { StateCreator } from "zustand";
-import { Resource } from "./resources";
 import { Item } from "./items";
 import { crafts } from "@/data/crafts";
 import { GameStore } from "./game";
@@ -8,7 +7,6 @@ import { GAME_ITEMS, GameItemKey } from "@/data/items";
 export interface Craft {
     result: { item: Item; qty: number };
     cost: {
-        resources?: { material: Resource; amount: number }[];
         items?: { key: GameItemKey; amount?: number }[];
     };
 }
@@ -28,23 +26,12 @@ export const createCraftSlice: StateCreator<GameStore, [], [], CraftSlice> = (
     craft: (id) => {
         const craft = get().crafts[id];
 
-        const enoughResources =
-            craft.cost.resources?.reduce((acc, { material, amount }) => {
-                const currentResourceAmount = get().resources[material].amount;
-                return acc && currentResourceAmount >= amount;
-            }, true) ?? true;
-
         const enoughItems =
             craft.cost.items?.reduce((acc, item) => {
                 return acc && get().hasItem(item.key, item.amount);
             }, true) ?? true;
 
-        if (!enoughItems || !enoughResources) return; // TODO: Handle insufficient resources/items message
-
-        // If can craft then remove all resources
-        craft.cost.resources?.forEach(({ material, amount }) =>
-            get().updateResource(material, -amount)
-        );
+        if (!enoughItems) return; // TODO: Handle insufficient items message
 
         // Remove all items
         craft.cost.items?.forEach(
