@@ -69,11 +69,38 @@ export const createMiningSlice: StateCreator<GameStore, [], [], MiningSlice> = (
             })
         );
 
-        // If the resource's hp reaches 0, add it to the player's resources and reset its hp
+        // If the resource's hp reaches 0, add it to the player's inventory and reset its hp
         if (get().miningResources[resource].current_hp <= 0) {
             broken = true;
-            const gain = get().computeResourcesYield(resource);
-            get().updateResource(resource, +gain);
+            const lootTable = resources[resource].lootTable;
+
+            // Process each drop in the loot table
+            lootTable.forEach((drop) => {
+                // Check if this drop occurs based on its chance
+                if (Math.random() <= drop.chance) {
+                    // Calculate random quantity within the min-max range
+                    const quantity = Math.floor(
+                        Math.random() *
+                            (drop.maxQuantity - drop.minQuantity + 1) +
+                            drop.minQuantity
+                    );
+
+                    // Apply resource multiplier only if this drop has a matching resourceType
+                    let finalQuantity = quantity;
+                    if ("resourceType" in drop && drop.resourceType) {
+                        const resourceYieldMultiplier =
+                            get().computeResourcesYield(drop.resourceType);
+                        finalQuantity = Math.floor(
+                            quantity * resourceYieldMultiplier
+                        );
+                    }
+
+                    if (finalQuantity > 0) {
+                        get().addItem(drop.item, finalQuantity);
+                    }
+                }
+            });
+
             set(
                 produce((state: GameStore) => {
                     state.miningResources[resource].current_hp =
