@@ -1,6 +1,14 @@
-import { ReactNode, useRef, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import ReactDOM from "react-dom";
 import clsx from "clsx";
+import {
+    useFloating,
+    flip,
+    shift,
+    offset,
+    Placement,
+    autoUpdate,
+} from "@floating-ui/react";
 
 type TooltipProps = {
     children: ReactNode;
@@ -20,86 +28,25 @@ export function Tooltip({
     align = "center",
 }: TooltipProps) {
     const [visible, setVisible] = useState(false);
-    const [coords, setCoords] = useState<{ top: number; left: number }>({
-        top: 0,
-        left: 0,
+
+    // Convert props to floating-ui placement string
+    const placement: Placement = (() => {
+        // ex: top-start, right-end…
+        const side = position;
+        const alignSuffix = align === "center" ? "" : `-${align}`; // "center" = no suffix
+        return (side + alignSuffix) as Placement;
+    })();
+
+    const { refs, floatingStyles } = useFloating({
+        placement,
+        middleware: [offset(8), flip(), shift({ padding: 8 })],
+        whileElementsMounted: autoUpdate,
     });
-
-    const triggerRef = useRef<HTMLDivElement>(null);
-    const tooltipRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (!visible || !triggerRef.current || !tooltipRef.current) return;
-
-        const trigger = triggerRef.current;
-        const tooltip = tooltipRef.current;
-
-        const triggerRect = trigger.getBoundingClientRect();
-        const tooltipRect = tooltip.getBoundingClientRect();
-
-        let top = 0,
-            left = 0;
-
-        // Position
-        switch (position) {
-            case "top":
-                top = triggerRect.top - tooltipRect.height - 8;
-                break;
-            case "bottom":
-                top = triggerRect.bottom + 8;
-                break;
-            case "left":
-                top =
-                    triggerRect.top +
-                    (triggerRect.height - tooltipRect.height) / 2;
-                left = triggerRect.left - tooltipRect.width - 8;
-                break;
-            case "right":
-                top =
-                    triggerRect.top +
-                    (triggerRect.height - tooltipRect.height) / 2;
-                left = triggerRect.right + 8;
-                break;
-        }
-
-        // Align
-        if (position === "top" || position === "bottom") {
-            switch (align) {
-                case "start":
-                    left = triggerRect.left;
-                    break;
-                case "center":
-                    left =
-                        triggerRect.left +
-                        (triggerRect.width - tooltipRect.width) / 2;
-                    break;
-                case "end":
-                    left = triggerRect.right - tooltipRect.width;
-                    break;
-            }
-        } else {
-            switch (align) {
-                case "start":
-                    top = triggerRect.top;
-                    break;
-                case "center":
-                    top =
-                        triggerRect.top +
-                        (triggerRect.height - tooltipRect.height) / 2;
-                    break;
-                case "end":
-                    top = triggerRect.bottom - tooltipRect.height;
-                    break;
-            }
-        }
-
-        setCoords({ top: top + window.scrollY, left: left + window.scrollX });
-    }, [visible, position, align]);
 
     return (
         <>
             <div
-                ref={triggerRef}
+                ref={refs.setReference}
                 onMouseEnter={() => setVisible(true)}
                 onMouseLeave={() => setVisible(false)}
                 className={clsx("inline-flex", className)}
@@ -111,16 +58,13 @@ export function Tooltip({
             {visible &&
                 ReactDOM.createPortal(
                     <div
-                        ref={tooltipRef}
+                        ref={refs.setFloating}
+                        style={floatingStyles}
                         className={clsx(
-                            "tooltip-border fixed z-50 rounded bg-black px-2 py-1 text-xs whitespace-nowrap text-white shadow-lg transition-opacity",
+                            "tooltip-border z-50 rounded bg-black px-2 py-1 text-xs whitespace-nowrap text-white shadow-lg transition-opacity",
                             visible ? "opacity-100" : "opacity-0",
                             content ? "" : "hidden"
                         )}
-                        style={{
-                            top: coords.top,
-                            left: coords.left,
-                        }}
                     >
                         {content}
                     </div>,
