@@ -1,5 +1,6 @@
 import { produce } from "immer";
 import { StateCreator } from "zustand";
+import { nanoid } from "nanoid";
 import { GameStore } from "./game";
 import { SlotType } from "./equipments";
 import { type EffectKey, EFFECTS } from "@/data/effects";
@@ -21,6 +22,7 @@ export type ItemEffect = {
 // This interface defines the common properties for all items in the game.
 export interface BaseItem {
     id: string;
+    instanceId: string; // Unique identifier for this specific item instance
     name: string;
     description?: string;
     texture: Texture;
@@ -94,7 +96,7 @@ export const createItemSlice: StateCreator<GameStore, [], [], ItemSlice> = (
             produce((state: ItemSlice) => {
                 // Check if the item is stackable
                 if (!item.stackable) {
-                    state.items.push(item);
+                    state.items.push({ ...item, instanceId: nanoid() });
                 } else {
                     // If not stackable, add a new item instance
                     const existing = state.items.find((i) => i.id === item.id);
@@ -103,7 +105,7 @@ export const createItemSlice: StateCreator<GameStore, [], [], ItemSlice> = (
                         return; // Exit early if item already exists
                     }
                     // Otherwise, add a new item instance
-                    item = { ...item, quantity: qty }; // Ensure quantity is set
+                    item = { ...item, quantity: qty, instanceId: nanoid() }; // Ensure quantity is set
                     state.items.push(item);
                 }
             })
