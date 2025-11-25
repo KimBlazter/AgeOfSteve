@@ -63,12 +63,17 @@ export interface GenericItem extends BaseItem {
     type: "generic";
 }
 
+export interface ResourceItem extends BaseItem {
+    type: "resource";
+}
+
 export type Item =
     | ToolItem
     | WeaponItem
     | ArmorItem
     | ConsumableItem
-    | GenericItem;
+    | GenericItem
+    | ResourceItem;
 
 export interface ItemSlice {
     items: Item[];
