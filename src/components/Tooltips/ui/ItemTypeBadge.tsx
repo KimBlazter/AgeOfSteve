@@ -23,7 +23,7 @@ export default function ItemTypeBadge({
             {item.type === "tool" && (
                 <span className="flex items-center justify-center gap-1 rounded-sm bg-white/60 px-0.5 py-0.5 text-black text-shadow-none">
                     <ItemIcon
-                        className="size-4 !p-0 brightness-0"
+                        className="size-4 p-0! brightness-0"
                         texture={("item:iron_" + item.toolType) as TextureId}
                     />
                 </span>
