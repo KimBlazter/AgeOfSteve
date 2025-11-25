@@ -45,18 +45,18 @@ export default function MineResourceButton() {
 
     return (
         <div className="flex flex-col items-center gap-2">
-            <div className="dialog-border-transparent !bg-mcInventoryBackground/50 relative flex size-20 items-center justify-center">
+            <div className="dialog-border-transparent bg-mcInventoryBackground/50! relative flex size-20 items-center justify-center">
                 <button
-                    className="h-full w-full !bg-transparent !p-1"
+                    className="h-full w-full bg-transparent! p-1!"
                     onClick={handleMine}
                     style={{
                         border: "none",
                     }}
                 >
                     <ItemIcon
-                        texture={resourceData.obtainedFrom.texture}
+                        texture={resourceData.texture}
                         className={clsx(
-                            "[&_img]:!image-auto transition-all duration-200 hover:scale-90",
+                            "[&_img]:image-auto! transition-all duration-200 hover:scale-90",
                             isClicked ? "scale-110" : "scale-80"
                         )}
                         style={
@@ -99,7 +99,7 @@ export default function MineResourceButton() {
                 </div>
 
                 {/* Info Button */}
-                <div className="absolute top-0 -right-6.5 flex !w-7 flex-col">
+                <div className="absolute top-0 -right-6.5 flex w-7! flex-col">
                     <Tooltip
                         content={
                             <MineResourceContent resourceData={resourceData} />
@@ -107,7 +107,7 @@ export default function MineResourceButton() {
                         position="right"
                         align="start"
                     >
-                        <div className="ml-1 flex size-6 items-center justify-center border-2 border-black !bg-black/40 p-1">
+                        <div className="ml-1 flex size-6 items-center justify-center border-2 border-black bg-black/40! p-1">
                             ?
                         </div>
                     </Tooltip>
