@@ -1,10 +1,35 @@
 import ItemComponent from "./ItemComponent";
 import { useGameStore } from "@/stores/game";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import ItemFilterComponent from "./ItemFilterComponent";
 
 export default function ItemsComponent() {
-    const items = useGameStore((state) => state.items);
+    const itemsRaw = useGameStore((s) => s.items);
+    const filters = useGameStore((s) => s.filters);
+
+    // Compute filtered items outside of the store
+    const items = useMemo(() => {
+        return itemsRaw.filter((item) => {
+            // search
+            if (
+                filters.search &&
+                filters.search !== "all" &&
+                !item.name.toLowerCase().includes(filters.search.toLowerCase())
+            )
+                return false;
+
+            // type
+            if (
+                filters.type &&
+                filters.type !== "all" &&
+                item.type !== filters.type
+            )
+                return false;
+
+            return true;
+        });
+    }, [itemsRaw, filters]);
+
     const containerRef = useRef<HTMLDivElement>(null);
     const [totalSlots, setTotalSlots] = useState(80);
 
@@ -16,7 +41,6 @@ export default function ItemsComponent() {
             const containerWidth = container.clientWidth;
             const containerHeight = container.clientHeight;
 
-            // Item slot size is 48px (size-12 in Tailwind)
             const slotSize = 48;
 
             const slotsPerRow = Math.floor(containerWidth / slotSize);
@@ -29,9 +53,7 @@ export default function ItemsComponent() {
         calculateSlots();
 
         const resizeObserver = new ResizeObserver(calculateSlots);
-        if (containerRef.current) {
-            resizeObserver.observe(containerRef.current);
-        }
+        resizeObserver.observe(containerRef.current!);
 
         return () => resizeObserver.disconnect();
     }, [items.length]);
@@ -54,7 +76,7 @@ export default function ItemsComponent() {
                 {items.map((item) => (
                     <ItemComponent key={item.instanceId} item={item} />
                 ))}
-                {/* Empty slots */}
+
                 {Array.from({ length: emptySlotsCount }).map((_, idx) => (
                     <div key={idx} className="item-slot" />
                 ))}
