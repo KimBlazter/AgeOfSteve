@@ -50,6 +50,8 @@ const DropdownIndicator = (
     );
 };
 
+const IndicatorSeparator = () => null;
+
 export default function ItemFilterComponent() {
     const filters = useGameStore((state) => state.filters);
     const setFilters = useGameStore((state) => state.setFilters);
@@ -59,7 +61,7 @@ export default function ItemFilterComponent() {
         options.find((opt) => opt.value === (filters.type || "all")) ||
         options[0];
 
-    const handleChange = (option: SelectOption | null) => {
+    const handleTypeChange = (option: SelectOption | null) => {
         if (option) {
             setFilters({
                 type: option.value === "all" ? undefined : option.value,
@@ -67,14 +69,52 @@ export default function ItemFilterComponent() {
         }
     };
 
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFilters({
+            search: e.target.value || undefined,
+        });
+    };
+
+    // Handle Escape key to clear focus
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Escape") {
+            e.currentTarget.blur();
+        }
+    };
+
+    const clearSearch = () => {
+        setFilters({
+            search: undefined,
+        });
+    };
+
     return (
-        <div className="flex flex-row gap-5 text-sm">
-            <div>Search</div>
+        <div className="flex flex-row gap-2 text-sm">
+            <div className="relative flex flex-row">
+                <input
+                    type="text"
+                    placeholder="Search items..."
+                    value={filters.search || ""}
+                    onChange={handleSearchChange}
+                    onKeyDown={handleKeyDown}
+                    className="dialog-border-transparent h-full bg-gray-600/50 px-3 py-1.5 pr-8 text-sm text-white outline-none placeholder:text-gray-300"
+                />
+                {filters.search && (
+                    <div
+                        onClick={() => {
+                            clearSearch();
+                        }}
+                        className="dialog-border-transparent absolute right-0 flex aspect-square h-full cursor-pointer items-center justify-center bg-red-500 p-1 text-white"
+                    >
+                        x
+                    </div>
+                )}
+            </div>
             <Select
                 value={selectedOption}
-                onChange={handleChange}
+                onChange={handleTypeChange}
                 options={options}
-                components={{ DropdownIndicator }}
+                components={{ DropdownIndicator, IndicatorSeparator }}
                 formatOptionLabel={(option) => (
                     <div className="flex items-center gap-2" key={option.value}>
                         <ItemIcon
