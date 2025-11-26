@@ -93,7 +93,6 @@ export interface ItemSlice {
     filters: InventoryFilters;
     setFilters: (patch: Partial<InventoryFilters>) => void;
     resetFilters: () => void;
-    getFilteredItems: () => ItemWithInstance[];
     addItem: (item: Item, quantity?: number) => void;
     removeItem: (item: Item, quantity?: number) => void;
     useItem: (item: Item) => void;
@@ -110,41 +109,27 @@ export const createItemSlice: StateCreator<GameStore, [], [], ItemSlice> = (
         return get().items;
     },
     filters: {
-        search: "all",
+        search: "",
         type: "all",
         equipmentSlot: "all",
         stackable: "all",
     },
     setFilters: (patch) =>
-    set((state) => ({
-        filters: {
-            ...state.filters,
-            ...patch,
-        },
-    })),
+        set((state) => ({
+            filters: {
+                ...state.filters,
+                ...patch,
+            },
+        })),
     resetFilters: () =>
-    set({
-        filters: {
-            search: "",
-            type: "all",
-            equipmentSlot: "all",
-            stackable: "all",
-        },
-    }),
-    getFilteredItems: () => {
-        const {items, filters} = get();
-        return items.filter((item) => {
-            // Filter by search term
-            if (filters.search && !item.name.toLowerCase().includes(filters.search.toLowerCase())) {
-                return false;
-            }
-
-            // Item type
-            if (filters.type && filters.type !== "all" && item.type !== filters.type) {
-                return false;
-            }
-        })
-    },
+        set({
+            filters: {
+                search: "",
+                type: "all",
+                equipmentSlot: "all",
+                stackable: "all",
+            },
+        }),
     addItem: (item, qty = 1) => {
         set(
             produce((state: ItemSlice) => {
