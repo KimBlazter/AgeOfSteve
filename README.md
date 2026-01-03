@@ -1,5 +1,9 @@
 # How to play ?
 
+## Requirements
+
+- Node.js version 22 or higher
+
 ## Clone this repo
 
 With HTTP
@@ -11,6 +15,9 @@ cd AgeOfSteve
 ## Start the game
 
 ```bash
+pnpm i
+pnpm play
+# or
 npm install
 npm run play
 ```
