@@ -1,5 +1,6 @@
 import { Item } from "@/stores/items";
-import Select, { components, DropdownIndicatorProps } from "react-select";
+import Select, { components } from "react-select";
+import type { DropdownIndicatorProps, StylesConfig } from "react-select";
 import ItemIcon from "../ItemIcon";
 import { Texture } from "@/utils/spriteLoader";
 import { useGameStore } from "@/stores/game";
@@ -51,6 +52,42 @@ const DropdownIndicator = (
 };
 
 const IndicatorSeparator = () => null;
+
+const selectStyles: StylesConfig<SelectOption, false> = {
+    control: (base, state) => ({
+        ...base,
+        backgroundColor: "rgba(75, 85, 99, 0.5)",
+        cursor: "pointer",
+        minWidth: "150px",
+        boxShadow: "none",
+        outline: "none",
+        borderColor:
+            state.isFocused
+                ? "rgba(55, 65, 81, 0.8)"
+                : "rgba(55, 65, 81, 0.8)",
+        "&:hover": {
+            borderColor: "rgba(55, 65, 81, 0.8)",
+        },
+    }),
+    menu: (base) => ({
+        ...base,
+        backgroundColor: "#374151",
+        border: "2px solid #1f2937",
+    }),
+    option: (base, state) => ({
+        ...base,
+        backgroundColor:
+            state.isSelected ? "#4b5563"
+            : state.isFocused ? "#4b5563"
+            : "#374151",
+        cursor: "pointer",
+        color: "#fff",
+    }),
+    singleValue: (base) => ({
+        ...base,
+        color: "#fff",
+    }),
+};
 
 export default function ItemFilterComponent() {
     const filters = useGameStore((state) => state.filters);
@@ -115,7 +152,7 @@ export default function ItemFilterComponent() {
                 onChange={handleTypeChange}
                 options={options}
                 components={{ DropdownIndicator, IndicatorSeparator }}
-                formatOptionLabel={(option) => (
+                formatOptionLabel={(option: SelectOption) => (
                     <div className="flex items-center gap-2" key={option.value}>
                         <ItemIcon
                             texture={option.icon}
@@ -125,41 +162,7 @@ export default function ItemFilterComponent() {
                     </div>
                 )}
                 className="dialog-border-transparent text-sm"
-                styles={{
-                    control: (base, state) => ({
-                        ...base,
-                        backgroundColor: "rgba(75, 85, 99, 0.5)",
-                        cursor: "pointer",
-                        minWidth: "150px",
-                        boxShadow: "none",
-                        outline: "none",
-                        borderColor:
-                            state.isFocused ?
-                                "rgba(55, 65, 81, 0.8)"
-                            :   "rgba(55, 65, 81, 0.8)",
-                        "&:hover": {
-                            borderColor: "rgba(55, 65, 81, 0.8)",
-                        },
-                    }),
-                    menu: (base) => ({
-                        ...base,
-                        backgroundColor: "#374151",
-                        border: "2px solid #1f2937",
-                    }),
-                    option: (base, state) => ({
-                        ...base,
-                        backgroundColor:
-                            state.isSelected ? "#4b5563"
-                            : state.isFocused ? "#4b5563"
-                            : "#374151",
-                        cursor: "pointer",
-                        color: "#fff",
-                    }),
-                    singleValue: (base) => ({
-                        ...base,
-                        color: "#fff",
-                    }),
-                }}
+                styles={selectStyles}
             />
         </div>
     );
